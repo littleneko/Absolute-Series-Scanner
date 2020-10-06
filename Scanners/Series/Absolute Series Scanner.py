@@ -89,7 +89,11 @@ COUNTER         = 500
 
 # Uses re.match() so forces a '^'
 IGNORE_DIRS_RX_RAW  = [ '@Recycle', r'\.@__thumb', r'lost\+found', r'\.AppleDouble', r'\$Recycle.Bin', 'System Volume Information', 'Temporary Items', 'Network Trash Folder',   ###### Ignored folders
-                        '@eaDir', 'Extras', r'Samples?', 'bonus', r'.*bonus disc.*', r'trailers?', r'.*_UNPACK_.*', r'.*_FAILED_.*', r'_?Misc', '.xattr']                        # source: Filters.py  removed '\..*',
+                        '@eaDir', 'Extras', r'Samples?', 'bonus', r'.*bonus disc.*', r'trailers?', r'.*_UNPACK_.*', r'.*_FAILED_.*', r'_?Misc', '.xattr',                        # source: Filters.py  removed '\..*',
+                        'CDs', 'Scans', 'SPs', 'Menu', 'Scan', 'BD Scans', 'DVD Scans', 'BD Scan', 'Bonus', 'Booklet', '特典CD', 'BD Illustration Gallery', 'Subs', 'NC',
+                        'Extra', 'OP-ED', 'Cinema Intros', 'Commentary', r'.*EAC.*', r'.*无损音乐.*', 'Openings', 'SPCD', 'CM', '.*映像特典.*', 'Special', 'SP DISK', 'Omake flash',
+                        'On air versions', 'Music CD', r'Meuns.*', 'SP', 'PRIVILEGE DISC', r'LYRICAL PARTY.*', r'Creditless.*', 'Previews', 'MAIN MOVIE',
+                      ]
 IGNORE_DIRS_RX      = [cic(entry) for entry in IGNORE_DIRS_RX_RAW]
 # Uses re.match() so forces a '^'
 IGNORE_FILES_RX_RAW = [ r'[ _\.\-]?sample', r'-Recap\.', r'\._', 'OST', 'soundtrack']                                                                                            # Skipped files (samples, trailers)
@@ -115,7 +119,7 @@ WHACK_PRE_CLEAN_RAW = [ "x264-FMD Release", "x264-h65", "x264-mSD", "x264-BAJSKO
                         "(Exiled_Destiny)", "720p", "480p", "_BD", ".XVID", "(xvid)", "dub.sub_ja+.ru+", "dub.sub_en.ja", "dub_en",
                         "-Cd 1", "-Cd 2", "Vol 1", "Vol 2", "Vol 3", "Vol 4", "Vol 5", "Vol.1", "Vol.2", "Vol.3", "Vol.4", "Vol.5",
                         "%28", "%29", " (1)", "(Clean)", "vostfr", "HEVC", "(Bonus inclus)", "(BD 1920x1080)", "10Bits-WKN", "WKN", "(Complet)", "Despair-Paradise", "Shanks@", "[720p]", "10Bits", 
-                        "(TV)", "[DragonMax]", "INTEGRALE", "MKV", "MULTI", "DragonMax", "Zone-Telechargement.Ws", "Zone-Telechargement", "AniLibria.TV", "HDTV-RIP"
+                        "(TV)", "[DragonMax]", "INTEGRALE", "MKV", "MULTI", "DragonMax", "Zone-Telechargement.Ws", "Zone-Telechargement", "AniLibria.TV", "HDTV-RIP", "(BDBOX Ver.)"
                       ]                                                                                                                                                               #include spaces, hyphens, dots, underscore, case insensitive
 WHACK_PRE_CLEAN     = [cic(re.escape(entry)) for entry in WHACK_PRE_CLEAN_RAW]
 WHACK               = [                                                                                                                                                               ### Tags to remove (lowercase) ###
@@ -132,7 +136,17 @@ WHACK               = [                                                         
                         'dsr', 'dsrip', 'hdtv', 'pdtv', 'ppv', 'stv', 'tvrip', 'complete movie', "hiei", "metis", "norar",                                                            # Source: dtv, stv
                         'cam', 'bdscr', 'dvdscr', 'dvdscreener', 'scr', 'screener', 'tc', 'telecine', 'ts', 'telesync', 'mp4',                                                        # Source: screener
                         "mthd", "thora", 'sickrage', 'brrip', "remastered", "yify", "tsr", "reidy", "gerdhanse", 'remux',                                                             #'limited', 
-                        'rikou', 'hom?', "it00nz", "nn92", "mthd", "elysium", "encodebyjosh", "krissy", "reidy", "it00nz", "s4a"                                                      # Release group
+                        'rikou', 'hom?', "it00nz", "nn92", "mthd", "elysium", "encodebyjosh", "krissy", "reidy", "it00nz", "s4a",                                                     # Release group
+                        "-", "ai-raws", "ai-raws&ank-raws", "ai-raws&vcb-studio", "a.i.r.nessub", "a.i.r.nessub&mawen1250", "airota&nekomoe kissaten&vcb-studio", "airota&vcb-studio",
+                        "ane", "ank-raws", "caso", "caso&i.g", "caso&sumisora", "dmg&hakugetsu&vcb-s", "dmg&makarihoshiyume&vcb-studio", "dmg&mh&vcb-studio", "dmg&vcb-studio",
+                        "eggpain-raws&vcb-studio", "flsnow", "flsnow&caso", "flsnow&keyfc", "flsnow&sumisora", "fn@link", "fn@lv.1", "fussoir", "hakugetsu&vcb-studio", "henshin",
+                        "hkg", "kagura", "kamigami&mabors&vcb-studio", "kamigami&vcb-studio", "ktxp&vcb-studio", "@link", "link", "littlebakas!", "liuyun&vcb-s&ank-raws",
+                        "liuyun&vcb-studio", "loveecho!&hakugetsu&vcb-studio", "loveecho!&vcb-studio", "@lv.1", "lv.1", "@lv.1", "lv.1", "mabors-raws", "mabors&vcb-studio",
+                        "maho.sub&vcb-studio", "mawen1250", "mawen1250&natsuki", "mawen1250&vcb-studio", "mh&airota&fzsd&vcb-studio", "mh&fzsd&vcb-studio", "moonmai&flsnow",
+                        "mysilu", "nekomoe kissaten&vcb-studio", "neo·qsw&vcb-studio", "nyamazing&vcb-studio", "pd@老蛇", "philosophy-raws", "pusraws", "pussub&vcb-studio",
+                        "r2jraw", "salender-raws", "sergey_krs", "shirokoi&airota&vcb-studio", "sumisora", "sweetsub&lolihouse&vcb-s", "taro", "t.h.x&vcb-studio", "txxz&a.i.r.nessub",
+                        "u2-rip", "uha-wings&rath&vcb-studio", "uha-wings&vcb-studio", "utw-thora", "vcb-s&philosophy-raws", "vcb-studio", "vcb-studio&loveecho!", "yan04000985&vcb-studio",
+                        "yousei-raws", "千夏字幕组&vcb-studio", "喵萌奶茶屋&vcb-studio", "nekomoe", "kissaten&vcb-studio",
                       ]
 
 CHARACTERS_MAP      = {                                                                                                                                                               #Specials characters to re-map
@@ -294,7 +308,7 @@ def Dict(var, *arg, **kwarg):
   return kwarg['default'] if var in (None, '', 'N/A', 'null') and kwarg and 'default' in kwarg else "" if var in (None, '', 'N/A', 'null') else var
 
 ### Set Logging to proper logging file ##################################################################
-def set_logging(root='', foldername='', filename='', backup_count=0, format='%(message)s', mode='w'):#%(asctime)-15s %(levelname)s - 
+def set_logging(root='', foldername='', filename='', backup_count=0, format='[%(levelname)s]\t[%(filename)s:%(lineno)d] %(message)s', mode='w'):#%(asctime)-15s %(levelname)s - 
   if Dict(PLEX_LIBRARY, root, 'agent') == 'com.plexapp.agents.hama':
     cache_path = os.path.join(PLEX_ROOT, 'Plug-in Support', 'Data', 'com.plexapp.agents.hama', 'DataItems', '_Logs')
   else:  cache_path = os.path.join(PLEX_ROOT, 'Logs', 'ASS Scanner Logs')
@@ -545,7 +559,7 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
         reverse_path.remove(folder)                 # Since iterating slice [:] or [:-1] doesn't hinder iteration. All ways to remove: reverse_path.pop(-1), reverse_path.remove(thing|array[0])
         break
     if not kwargs and len(reverse_path)>1 and path.count(os.sep) and "Plex Versions" not in path and "Optimized for " not in path and len(dirs)>1:
-      Log.info("grouping folder? dirs: {}, reverse_path: {} [return]".format(dirs, reverse_path))
+      Log.info("grouping folder? dirs: {}, reverse_path: {} [return]".format(json.dumps(dirs, indent=1, ensure_ascii=False), json.dumps(reverse_path, indent=1, ensure_ascii=False)))
       return       #if not grouping folder scan, skip grouping folder
   
   ### Create *.filelist.log file ###
@@ -561,7 +575,7 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
     for rx in IGNORE_DIRS_RX:
       if rx.match(os.path.basename(subdir)):
         dirs.remove(subdir)
-        Log.info("# Folder: '{}' match '{}' pattern: '{}'".format(os.path.relpath(subdir, root), 'IGNORE_DIRS_RX', rx))
+        Log.info("# Folder: '{}' match '{}' pattern: '{}'".format(os.path.relpath(subdir, root), 'IGNORE_DIRS_RX', rx.pattern))
         break  #skip dirs to be ignored
     else:  Log.info("[folder] " + os.path.relpath(subdir, root))
   
@@ -572,7 +586,7 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
     if ext in VIDEO_EXTS:
       for rx in IGNORE_FILES_RX + [cic(entry) for entry in plexignore_files]:  # Filter trailers and sample files
         if rx.match(os.path.basename(file)):
-          Log.info("# File: '{}' match '{}' pattern: '{}'".format(os.path.relpath(file, root), 'IGNORE_FILES_RX' if rx in IGNORE_FILES_RX else '.plexignore', rx))
+          Log.info("# File: '{}' match '{}' pattern: '{}'".format(os.path.relpath(file, root), 'IGNORE_FILES_RX' if rx in IGNORE_FILES_RX else '.plexignore', rx.pattern))
           files.remove(file)
           break
       else:
@@ -1102,7 +1116,7 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
       ### Ignore dirs ###
       for rx in IGNORE_DIRS_RX:                                   # loop rx for folders to ignore
         if rx.match(os.path.basename(path)):                      # if folder match rx
-          Log.info("# Folder: '{}' match '{}' pattern: '{}'".format(path, 'IGNORE_DIRS_RX', rx))
+          Log.info("# Folder: '{}' match '{}' pattern: '{}'".format(path, 'IGNORE_DIRS_RX', rx.pattern))
           break
       else:  ### Not skipped
         
