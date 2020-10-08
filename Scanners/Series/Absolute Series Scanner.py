@@ -92,7 +92,7 @@ IGNORE_DIRS_RX_RAW  = [ '@Recycle', r'\.@__thumb', r'lost\+found', r'\.AppleDoub
                         '@eaDir', 'Extras', r'Samples?', 'bonus', r'.*bonus disc.*', r'trailers?', r'.*_UNPACK_.*', r'.*_FAILED_.*', r'_?Misc', '.xattr',                        # source: Filters.py  removed '\..*',
                         'CDs', 'Scans', 'SPs', 'Menu', 'Scan', 'BD Scans', 'DVD Scans', 'BD Scan', 'Bonus', 'Booklet', '特典CD', 'BD Illustration Gallery', 'Subs', 'NC',
                         'Extra', 'OP-ED', 'Cinema Intros', 'Commentary', r'.*EAC.*', r'.*无损音乐.*', 'Openings', 'SPCD', 'CM', '.*映像特典.*', 'Special', 'SP DISK', 'Omake flash',
-                        'On air versions', 'Music CD', r'Meuns.*', 'SP', 'PRIVILEGE DISC', r'LYRICAL PARTY.*', r'Creditless.*', 'Previews', 'MAIN MOVIE',
+                        'On air versions', 'Music CD', r'Meuns.*', 'SP', 'PRIVILEGE DISC', r'LYRICAL PARTY.*', r'Creditless.*', 'Previews', 'MAIN MOVIE', 'Picture Drama'
                       ]
 IGNORE_DIRS_RX      = [cic(entry) for entry in IGNORE_DIRS_RX_RAW]
 # Uses re.match() so forces a '^'
@@ -119,7 +119,8 @@ WHACK_PRE_CLEAN_RAW = [ "x264-FMD Release", "x264-h65", "x264-mSD", "x264-BAJSKO
                         "(Exiled_Destiny)", "720p", "480p", "_BD", ".XVID", "(xvid)", "dub.sub_ja+.ru+", "dub.sub_en.ja", "dub_en",
                         "-Cd 1", "-Cd 2", "Vol 1", "Vol 2", "Vol 3", "Vol 4", "Vol 5", "Vol.1", "Vol.2", "Vol.3", "Vol.4", "Vol.5",
                         "%28", "%29", " (1)", "(Clean)", "vostfr", "HEVC", "(Bonus inclus)", "(BD 1920x1080)", "10Bits-WKN", "WKN", "(Complet)", "Despair-Paradise", "Shanks@", "[720p]", "10Bits", 
-                        "(TV)", "[DragonMax]", "INTEGRALE", "MKV", "MULTI", "DragonMax", "Zone-Telechargement.Ws", "Zone-Telechargement", "AniLibria.TV", "HDTV-RIP", "(BDBOX Ver.)"
+                        "(TV)", "[DragonMax]", "INTEGRALE", "MKV", "MULTI", "DragonMax", "Zone-Telechargement.Ws", "Zone-Telechargement", "AniLibria.TV", "HDTV-RIP", "(BDBOX Ver.)",
+                        "YUV420P10"
                       ]                                                                                                                                                               #include spaces, hyphens, dots, underscore, case insensitive
 WHACK_PRE_CLEAN     = [cic(re.escape(entry)) for entry in WHACK_PRE_CLEAN_RAW]
 WHACK               = [                                                                                                                                                               ### Tags to remove (lowercase) ###
@@ -146,7 +147,7 @@ WHACK               = [                                                         
                         "mysilu", "nekomoe kissaten&vcb-studio", "neo·qsw&vcb-studio", "nyamazing&vcb-studio", "pd@老蛇", "philosophy-raws", "pusraws", "pussub&vcb-studio",
                         "r2jraw", "salender-raws", "sergey_krs", "shirokoi&airota&vcb-studio", "sumisora", "sweetsub&lolihouse&vcb-s", "taro", "t.h.x&vcb-studio", "txxz&a.i.r.nessub",
                         "u2-rip", "uha-wings&rath&vcb-studio", "uha-wings&vcb-studio", "utw-thora", "vcb-s&philosophy-raws", "vcb-studio", "vcb-studio&loveecho!", "yan04000985&vcb-studio",
-                        "yousei-raws", "千夏字幕组&vcb-studio", "喵萌奶茶屋&vcb-studio", "nekomoe", "kissaten&vcb-studio",
+                        "yousei-raws", "千夏字幕组&vcb-studio", "喵萌奶茶屋&vcb-studio", "nekomoe", "kissaten&vcb-studio", "dgwxx", "lv1", "アニメ BD"
                       ]
 
 CHARACTERS_MAP      = {                                                                                                                                                               #Specials characters to re-map
@@ -512,6 +513,8 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
   log_filename = path.split(os.sep)[0] if path else '_root_' + root.replace(os.sep, '-')
   anidb_xml    = None
   #VideoFiles.Scan(path, files, media, dirs, root)  # If enabled does not allow zero size files
+  Log.info("".ljust(157, '='))
+  Log.info("path: %s, files: %s, media: %s, dirs: %s, root: %s" % (path, json.dumps(files, indent=1, ensure_ascii=False), media, json.dumps(dirs, indent=1, ensure_ascii=False), root))
     
   ### .plexignore file ###
   plexignore_dirs, plexignore_files, msg, source, id = [], [], [], '', ''
@@ -639,7 +642,8 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
     ### Grouping folders skip , unless single series folder ###
     if not kwargs and len(reverse_path)>1 and not season_folder_first:  
       parent_dir    = os.path.join(root, reverse_path[-1])  # folder at root fullpath
-      parent_dir_nb = len([file for dir in os.listdir(parent_dir) if os.path.isdir(os.path.join(parent_dir, dir))]) #How many folders in folder at root
+      parent_dir_nb = len([file for dir in os.listdir(parent_dir) if os.path.isdir(os.path.join(parent_dir, dir).decode('utf-8'))]) #How many folders in folder at root
+      Log.info("parent_dir: %s, parent_dir_nb: %s" % (parent_dir, parent_dir_nb))
       if len(reverse_path)>1 and parent_dir_nb>1 and "Plex Versions" not in parent_dir and "Optimized for " not in parent_dir: 
         Log.info("### Grouping folders skipped, will be handled by root level scan ### [return]")
         return  #Grouping folders Plex call, but mess after one season folder is ok
@@ -1134,7 +1138,9 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
         folder_count[path]        = 0
         for file in os.listdir(full_path):
           path_item = os.path.join(full_path, file) 
-          if os.path.isdir(path_item):                 subdir_dirs.append(path_item);  folder_count[path] +=1  #Fullpath
+          path_item_unicode = path_item.decode('utf-8')
+          # Log.info("IsFolder: %s, path_item: %s" % (os.path.isdir(path_item_unicode), path_item_unicode))
+          if os.path.isdir(path_item_unicode):                 subdir_dirs.append(path_item);  folder_count[path] +=1  #Fullpath
           elif extension(file) in VIDEO_EXTS+['zip']:  subdir_files.append(path_item)                          #Fullpath
         if not subdir_files and subdir_dirs:  # Only add in subfolders if no valid video files in the folder
           Log.info(''.ljust(157, '-'))
@@ -1143,9 +1149,12 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
         ### Call Grouping folders series ###
         #if subdir_files:                                                           ### Calling Scan for every folder with files ###
         #if subdir_files and not(len(reverse_path)>1 and not season_folder_first):  ### Calling Scan normal    subfolders only ###
+        Log.info("FUCK full_path: %s, root: %s" % (full_path, root))
+        Log.info("FUCK full_path_count: %d, root_count: %d" % (full_path.count(os.sep), root.count(os.sep)))
         grouping_dir = full_path.rsplit(os.sep, full_path.count(os.sep)-1-root.count(os.sep))[0]
         root_folder  = os.path.relpath(grouping_dir, root).split(os.sep, 1)[0]
         if subdir_files and len(reverse_path)>1 and not season_folder_first and folder_count[root_folder]>1:  ### Calling Scan for grouping folders only ###
+          Log.info("grouping_dir: %s, dirs: %s" % (json.dumps(grouping_dir, indent=1, ensure_ascii=False), json.dumps(dirs, indent=1, ensure_ascii=False)))
           if grouping_dir in dirs:
             Log.info(''.ljust(157, '-'))
             Log.info("[{}] Grouping folder (contain {} dirs)".format(root_folder, folder_count[root_folder]))
