@@ -165,7 +165,7 @@ WS_VERSION          = com(r"v\d$")
 WS_DIGIT            = com(r"^\d+(\.\d+)?$")
 WS_MULTI_EP_SIMPLE  = com(r"^(?P<ep>\d{1,3})-(?P<ep2>\d{1,3})$")
 WS_MULTI_EP_COMPLEX = com(r"^(ep?[ -]?)?(?P<ep>\d{1,3})(-|ep?|-ep?)(?P<ep2>\d{1,3})")
-WS_SPECIALS         = com(r"^((t|o)\d{1,3}$|(sp|special|op|ncop|opening|ed|nced|ending|trailer|promo|pv|others?)(\d{1,3})?$)")
+WS_SPECIALS         = com(r"^((t|o)\d{1,3}$|(sp|special|op|ncop|opening|ed|nced|ending|trailer|promo|pv|others|preview|creditless ed|creditless op|info?)(\d{1,3})?$)")
 # Switch to turn on youtube date scanning
 SW_YOUTUBE_DATE     = False
 
@@ -514,7 +514,7 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
   anidb_xml    = None
   #VideoFiles.Scan(path, files, media, dirs, root)  # If enabled does not allow zero size files
   Log.info("".ljust(157, '='))
-  Log.info("path: %s, files: %s, media: %s, dirs: %s, root: %s" % (path, json.dumps(files, indent=1, ensure_ascii=False), media, json.dumps(dirs, indent=1, ensure_ascii=False), root))
+  Log.info("FUCK path: %s, files: %s, media: %s, dirs: %s, root: %s" % (path, json.dumps(files, indent=1, ensure_ascii=False), media, json.dumps(dirs, indent=1, ensure_ascii=False), root))
     
   ### .plexignore file ###
   plexignore_dirs, plexignore_files, msg, source, id = [], [], [], '', ''
@@ -643,7 +643,7 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
     if not kwargs and len(reverse_path)>1 and not season_folder_first:  
       parent_dir    = os.path.join(root, reverse_path[-1])  # folder at root fullpath
       parent_dir_nb = len([file for dir in os.listdir(parent_dir) if os.path.isdir(os.path.join(parent_dir, dir).decode('utf-8'))]) #How many folders in folder at root
-      Log.info("parent_dir: %s, parent_dir_nb: %s" % (parent_dir, parent_dir_nb))
+      Log.info("FUCK parent_dir: %s, parent_dir_nb: %s" % (parent_dir, parent_dir_nb))
       if len(reverse_path)>1 and parent_dir_nb>1 and "Plex Versions" not in parent_dir and "Optimized for " not in parent_dir: 
         Log.info("### Grouping folders skipped, will be handled by root level scan ### [return]")
         return  #Grouping folders Plex call, but mess after one season folder is ok
@@ -1043,6 +1043,7 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
         continue
 
       ### Check for Regex: SERIES_RX + ANIDB_RX ###
+      Log.info("FUCK filename: %s, special: %s" % (filename, is_special))
       ep = filename
       for rx in ANIDB_RX if is_special else (SERIES_RX + ANIDB_RX):
         match = rx.search(ep)
@@ -1139,9 +1140,10 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
         for file in os.listdir(full_path):
           path_item = os.path.join(full_path, file) 
           path_item_unicode = path_item.decode('utf-8')
-          # Log.info("IsFolder: %s, path_item: %s" % (os.path.isdir(path_item_unicode), path_item_unicode))
+          #Log.info("FUCK IsFolder: %s, path_item: %s" % (os.path.isdir(path_item_unicode), path_item_unicode))
           if os.path.isdir(path_item_unicode):                 subdir_dirs.append(path_item);  folder_count[path] +=1  #Fullpath
-          elif extension(file) in VIDEO_EXTS+['zip']:  subdir_files.append(path_item)                          #Fullpath
+          elif extension(file) in VIDEO_EXTS:  subdir_files.append(path_item)                          #Fullpath
+        #Log.info("FUCK subdir_files: %s, subdir_dirs: %s" % (json.dumps(subdir_files, indent=1, ensure_ascii=False), json.dumps(subdir_dirs, indent=1, ensure_ascii=False)))
         if not subdir_files and subdir_dirs:  # Only add in subfolders if no valid video files in the folder
           Log.info(''.ljust(157, '-'))
           for x in subdir_dirs:  Log.info("[Added] " + x);  subfolders.append(x)
@@ -1149,8 +1151,8 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
         ### Call Grouping folders series ###
         #if subdir_files:                                                           ### Calling Scan for every folder with files ###
         #if subdir_files and not(len(reverse_path)>1 and not season_folder_first):  ### Calling Scan normal    subfolders only ###
-        Log.info("FUCK full_path: %s, root: %s" % (full_path, root))
-        Log.info("FUCK full_path_count: %d, root_count: %d" % (full_path.count(os.sep), root.count(os.sep)))
+        #Log.info("FUCK full_path: %s, root: %s" % (full_path, root))
+        #Log.info("FUCK full_path_count: %d, root_count: %d" % (full_path.count(os.sep), root.count(os.sep)))
         grouping_dir = full_path.rsplit(os.sep, full_path.count(os.sep)-1-root.count(os.sep))[0]
         root_folder  = os.path.relpath(grouping_dir, root).split(os.sep, 1)[0]
         if subdir_files and len(reverse_path)>1 and not season_folder_first and folder_count[root_folder]>1:  ### Calling Scan for grouping folders only ###
