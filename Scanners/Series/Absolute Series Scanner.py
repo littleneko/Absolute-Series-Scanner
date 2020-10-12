@@ -958,6 +958,8 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
         if not path:  root_filename = filename
         filename = encodeASCII(filename)
       
+      filename = re.sub(r"(\[\d{1,3})\(BDBOX VER\.\)(\])", r"\1\2", filename, flags=re.IGNORECASE)
+      re.sub(r"(\[\d{1,3})v\d(\])", r"\1\2", filename, flags=re.IGNORECASE)
       ### remove cleansed folder name from cleansed filename or keywords otherwise ###
       if path and run_count == 1:
         if clean_string(file, True, no_dash=True)==clean_string(folder_show, True, no_dash=True):  filename, title  = "01", folder_show                  ### If a file name matches the folder name, place as episode 1
@@ -1014,7 +1016,7 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
         ep=word.lower().strip('-.')                                                                                                                                   # cannot use words[words.index(word)] otherwise# if word=='': continue filter prevent "" on double spaces
         if WS_VERSION.search(ep):                                                                                  ep=ep[:-2].rstrip('-.')                            #
         if not ep:                                                                                                 continue                                           #
-        for prefix in ["ep", "e", "act", "s"]:                                                                                                                        #
+        for prefix in ["ep", "e", "act", "s", "#"]:                                                                                                                        #
           if ep.startswith(prefix) and len(ep)>len(prefix) and WS_DIGIT.search(ep[len(prefix):]):
             #Log.info('misc_count[word]: {}, filename.count(word)>=2: {}'.format(misc_count[word] if word in misc_count else 0, filename.count(word)))
             ep, season = ep[len(prefix):], 0 if prefix=="s" and (word not in misc_count or filename.count(word)==1 and misc_count[word]==1 or filename.count(word)>=2 and misc_count[word]==2) else season  # E/EP/act before ep number ex: Trust and Betrayal OVA-act1 # to solve s00e002 "Code Geass Hangyaku no Lelouch S5 Picture Drama 02 'Stage 3.25'.mkv" "'Stage 3 25'"
@@ -1172,7 +1174,11 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
 if __name__ == '__main__':  #command line
   print("Absolute Series Scanner by ZeroQI")
   path  = sys.argv[1]
+  # cur = "E"
+  # root = "/mnt/DATA/00000"
+  # path = os.path.join(root, cur)
   files = [os.path.join(path, file) for file in os.listdir(path)]
   media = []
   Scan(path[1:], files, media, [])
+  # Scan(cur, files, media, [], root=root)
   print("Files detected: ", media)
