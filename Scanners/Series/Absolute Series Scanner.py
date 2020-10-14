@@ -309,7 +309,7 @@ def Dict(var, *arg, **kwarg):
   return kwarg['default'] if var in (None, '', 'N/A', 'null') and kwarg and 'default' in kwarg else "" if var in (None, '', 'N/A', 'null') else var
 
 ### Set Logging to proper logging file ##################################################################
-def set_logging(root='', foldername='', filename='', backup_count=0, format='[%(levelname)s]\t[%(filename)s:%(lineno)d] %(message)s', mode='w'):#%(asctime)-15s %(levelname)s - 
+def set_logging(root='', foldername='', filename='', backup_count=0, format='%(asctime)s [%(levelname)s]\t[%(filename)s:%(lineno)d] %(message)s', mode='w'):#%(asctime)-15s %(levelname)s -
   if Dict(PLEX_LIBRARY, root, 'agent') == 'com.plexapp.agents.hama':
     cache_path = os.path.join(PLEX_ROOT, 'Plug-in Support', 'Data', 'com.plexapp.agents.hama', 'DataItems', '_Logs')
   else:  cache_path = os.path.join(PLEX_ROOT, 'Logs', 'ASS Scanner Logs')
@@ -514,7 +514,7 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
   anidb_xml    = None
   #VideoFiles.Scan(path, files, media, dirs, root)  # If enabled does not allow zero size files
   Log.info("".ljust(157, '='))
-  Log.info("FUCK path: %s, files: %s, media: %s, dirs: %s, root: %s" % (path, json.dumps(files, indent=1, ensure_ascii=False), media, json.dumps(dirs, indent=1, ensure_ascii=False), root))
+  # Log.info("FUCK path: %s, files: %s, media: %s, dirs: %s, root: %s" % (path, json.dumps(files, indent=1, ensure_ascii=False), media, json.dumps(dirs, indent=1, ensure_ascii=False), root))
     
   ### .plexignore file ###
   plexignore_dirs, plexignore_files, msg, source, id = [], [], [], '', ''
@@ -643,7 +643,7 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
     if not kwargs and len(reverse_path)>1 and not season_folder_first:  
       parent_dir    = os.path.join(root, reverse_path[-1])  # folder at root fullpath
       parent_dir_nb = len([file for dir in os.listdir(parent_dir) if os.path.isdir(os.path.join(parent_dir, dir).decode('utf-8'))]) #How many folders in folder at root
-      Log.info("FUCK parent_dir: %s, parent_dir_nb: %s" % (parent_dir, parent_dir_nb))
+      # Log.info("FUCK parent_dir: %s, parent_dir_nb: %s" % (parent_dir, parent_dir_nb))
       if len(reverse_path)>1 and parent_dir_nb>1 and "Plex Versions" not in parent_dir and "Optimized for " not in parent_dir: 
         Log.info("### Grouping folders skipped, will be handled by root level scan ### [return]")
         return  #Grouping folders Plex call, but mess after one season folder is ok
@@ -959,7 +959,7 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
         filename = encodeASCII(filename)
       
       filename = re.sub(r"(\[\d{1,3})\(BDBOX VER\.\)(\])", r"\1\2", filename, flags=re.IGNORECASE)
-      re.sub(r"(\[\d{1,3})v\d(\])", r"\1\2", filename, flags=re.IGNORECASE)
+      filename = re.sub(r"(\[\d{1,3})v\d(\])", r"\1\2", filename, flags=re.IGNORECASE)
       ### remove cleansed folder name from cleansed filename or keywords otherwise ###
       if path and run_count == 1:
         if clean_string(file, True, no_dash=True)==clean_string(folder_show, True, no_dash=True):  filename, title  = "01", folder_show                  ### If a file name matches the folder name, place as episode 1
@@ -1045,7 +1045,7 @@ def Scan(path, files, media, dirs, language=None, root=None, **kwargs): #get cal
         continue
 
       ### Check for Regex: SERIES_RX + ANIDB_RX ###
-      Log.info("FUCK filename: %s, special: %s" % (filename, is_special))
+      # Log.info("FUCK filename: %s, special: %s" % (filename, is_special))
       ep = filename
       for rx in ANIDB_RX if is_special else (SERIES_RX + ANIDB_RX):
         match = rx.search(ep)
